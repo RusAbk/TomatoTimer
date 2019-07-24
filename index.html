@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TomatoTimer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 130px;
+        }
+
+        button {
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 5px 15px;
+            display: inline-block;
+            text-align: center;
+            width: 150px;
+        }
+
+        #timeDisplay {
+            display: none;
+            color: #fff;
+            font-size: 30px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body style="background: #55efc4;">
+    <div id="timeDisplay"></div>
+    <button id="btnStart">Work Hard!</button>
+
+    <script>
+        'use strict';
+        
+        
+        const remote = require('electron').remote
+        let mainWindow = remote.getCurrentWindow()
+        
+        // === VARIABLES ======================================================
+        let btnStart = document.querySelector('#btnStart');
+        let timeDisplay = document.querySelector('#timeDisplay');
+
+        let startTime;
+        let endTime;
+
+        let sessionLength = 25; // in minutes
+        let breakLength = 5; // in minutes
+
+        let mode = 0;
+        let timeCounts = 0;
+
+        let clWork = '#ff7675';
+        let clBreak = '#55efc4';
+
+        var notificationSound = new Audio();
+        notificationSound.src = 'notification.wav';
+        
+
+
+        let lifeCicle = setInterval(() => {
+            if (timeCounts && !updTime()) {
+                chTimeCounting();
+                notificationSound.play();
+            }
+        }, 500);
+
+
+        btnStart.addEventListener('click', () => {
+            chMod();
+            startTime = new Date();
+            let timeInterval = mode ? sessionLength : breakLength;
+            endTime = +startTime + timeInterval * 60 * 1000;
+            updTime();
+            chTimeCounting();
+        });
+        
+        document.addEventListener('keydown', function(e){
+            if(e.keyCode == 27) mainWindow.close();
+        });
+
+
+
+        // === AUXILIARY FUNCTIONS ============================================
+        function updTime() {
+            let curTime = new Date();
+            let diff = endTime - +curTime;
+
+            let diffMin = Math.floor(diff / 1000 / 60);
+            let diffSec = Math.floor(diff / 1000 % 60);
+
+            timeDisplay.innerHTML = `${addLeadingZero(diffMin)} : ${addLeadingZero(diffSec)}`;
+
+            return !(Math.round(diff / 1000) <= 0);
+        }
+
+        function addLeadingZero(a) {
+            return (a < 10 ? '0' + a : a);
+        }
+
+        function chMod() {
+            mode = !mode;
+            document.body.style.background = mode ? clWork : clBreak;
+            btnStart.innerHTML = mode ? 'Go Chilling' : 'Work Hard!'
+        }
+
+        function chTimeCounting() {
+            timeCounts = !timeCounts;
+            btnStart.style.display = timeCounts ? 'none' : 'inline-block';
+            timeDisplay.style.display = !timeCounts ? 'none' : 'inline-block';
+        }
+    </script>
+</body>
+
+</html>
