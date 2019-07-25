@@ -4,13 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>TomatoTimer</title>
-    
+
     <link rel="stylesheet" href="uikit/css/uikit.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         body {
             color: #fff;
             font-family: sans-serif;
@@ -22,7 +18,7 @@
             height: 100vh;
         }
 
-        button {
+        #btnStart {
             color: #fff;
             border: 2px solid #fff;
             border-radius: 5px;
@@ -45,18 +41,37 @@
 </head>
 
 <body style="background: #55efc4;">
+    <span id="menuToggle" uk-toggle="target: #modal-settings" uk-icon="settings"
+        class="uk-position-top-right uk-position-small"></span>
+
     <div id="timeDisplay"></div>
     <button id="btnStart">Work Hard!</button>
+
+    <!-- MODAL: SETTINGS -->
+    <div id="modal-settings" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+
+            <div>
+                <label class="uk-form-label" for="sessionLengthField">Сессия</label>
+                <input type="number" id="sessionLengthField" class="uk-input uk-form-small" value="25">
+
+                <label class="uk-form-label" for="breakLengthField">Отдых</label>
+                <input type="number" id="breakLengthField" class="uk-input uk-form-small" value="5">
+            </div>
+        </div>
+    </div>
+
 
     <script src="uikit/js/uikit.min.js"></script>
     <script src="uikit/js/uikit-icons.min.js"></script>
     <script>
         'use strict';
-        
-        
+
+
         const remote = require('electron').remote
         let mainWindow = remote.getCurrentWindow()
-        
+
         // === VARIABLES ======================================================
         let btnStart = document.querySelector('#btnStart');
         let timeDisplay = document.querySelector('#timeDisplay');
@@ -64,8 +79,8 @@
         let startTime;
         let endTime;
 
-        let sessionLength = 25; // in minutes
-        let breakLength = 5; // in minutes
+        let sessionLength = 0.1; // in minutes
+        let breakLength = 0.05; // in minutes
 
         let mode = 0;
         let timeCounts = 0;
@@ -75,7 +90,7 @@
 
         var notificationSound = new Audio();
         notificationSound.src = 'notification.wav';
-        
+
 
 
         let lifeCicle = setInterval(() => {
@@ -94,10 +109,18 @@
             updTime();
             chTimeCounting();
         });
-        
-        document.addEventListener('keydown', function(e){
-            if(e.keyCode == 27) mainWindow.close();
+
+        document.addEventListener('keydown', function (e) {
+            if (e.keyCode == 27) mainWindow.close();
         });
+
+        document.querySelector('#sessionLengthField').addEventListener('input', (e) => {
+            sessionLength = e.currentTarget.value;
+        })
+
+        document.querySelector('#breakLengthField').addEventListener('input', (e) => {
+            breakLength = e.currentTarget.value;
+        })
 
 
 
