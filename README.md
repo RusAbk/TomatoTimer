@@ -16,5 +16,5 @@ npm start
 
 ## How to compile?
 ```
-electron-packager . --prune=true --overwrite=true
+npm run-script pack
 ```
