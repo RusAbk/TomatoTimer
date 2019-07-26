@@ -7,6 +7,9 @@
 
     <link rel="stylesheet" href="uikit/css/uikit.min.css">
     <style>
+        * {
+            outline: none;
+        }
         body {
             color: #fff;
             font-family: sans-serif;
@@ -16,6 +19,13 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+        }
+
+        #timeDisplay {
+            display: none;
+            color: #fff;
+            font-size: 30px;
+            font-weight: 700;
         }
 
         #btnStart {
@@ -31,11 +41,12 @@
             width: 150px;
         }
 
-        #timeDisplay {
-            display: none;
-            color: #fff;
-            font-size: 30px;
-            font-weight: 700;
+        #skipBtn {
+            font-size: 12px;
+            border: 0;
+            background-color: transparent;
+            color: #ffffff;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -44,8 +55,11 @@
     <span id="menuToggle" uk-toggle="target: #modal-settings" uk-icon="settings"
         class="uk-position-top-right uk-position-small"></span>
 
-    <div id="timeDisplay"></div>
-    <button id="btnStart">Work Hard!</button>
+    <div style="text-align: center;">
+        <div id="timeDisplay"></div>
+        <button id="btnStart">Work Hard!</button><br>
+        <button id="skipBtn">Skip this step</button>
+    </div>
 
     <!-- MODAL: SETTINGS -->
     <div id="modal-settings" uk-modal>
@@ -79,8 +93,8 @@
         let startTime;
         let endTime;
 
-        let sessionLength = 25; // in minutes
-        let breakLength = 5; // in minutes
+        let sessionLength = 0.2; // in minutes
+        let breakLength = 0.1; // in minutes
 
         let mode = 0;
         let timeCounts = 0;
@@ -98,6 +112,7 @@
                 chTimeCounting();
                 notificationSound.play();
             }
+            console.log(mode);
         }, 500);
 
 
@@ -109,6 +124,11 @@
             updTime();
             chTimeCounting();
         });
+
+        document.querySelector('#skipBtn').addEventListener('click', ()=>{
+            if (!timeCounts) chMod();
+            stopTimeCounting();
+        })
 
         document.addEventListener('keydown', function (e) {
             if (e.keyCode == 27) mainWindow.close();
@@ -149,6 +169,12 @@
 
         function chTimeCounting() {
             timeCounts = !timeCounts;
+            btnStart.style.display = timeCounts ? 'none' : 'inline-block';
+            timeDisplay.style.display = !timeCounts ? 'none' : 'inline-block';
+        }
+
+        function stopTimeCounting() {
+            timeCounts = false;
             btnStart.style.display = timeCounts ? 'none' : 'inline-block';
             timeDisplay.style.display = !timeCounts ? 'none' : 'inline-block';
         }
