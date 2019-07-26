@@ -21,6 +21,18 @@
             height: 100vh;
         }
 
+        button{
+            cursor: pointer;
+        }
+
+        .btn-animated{
+            transition: .3s;
+        }
+        .btn-animated:hover{
+            transform: scale(1.1, 1.1);
+        }
+        
+
         #timeDisplay {
             display: none;
             color: #fff;
@@ -51,14 +63,14 @@
     </style>
 </head>
 
-<body style="background: #55efc4;">
+<body style="background: #ff7675;">
     <span id="menuToggle" uk-toggle="target: #modal-settings" uk-icon="settings"
         class="uk-position-top-right uk-position-small"></span>
 
     <div style="text-align: center;">
         <div id="timeDisplay"></div>
-        <button id="btnStart">Work Hard!</button><br>
-        <button id="skipBtn">Skip this step</button>
+        <button id="btnStart" class="btn-animated">Work Hard!</button><br>
+        <button id="skipBtn" class="btn-animated">Skip this step</button>
     </div>
 
     <!-- MODAL: SETTINGS -->
@@ -96,7 +108,7 @@
         let sessionLength = 0.2; // in minutes
         let breakLength = 0.1; // in minutes
 
-        let mode = 0;
+        let mode = 1;
         let timeCounts = 0;
 
         let clWork = '#ff7675';
@@ -111,13 +123,13 @@
             if (timeCounts && !updTime()) {
                 chTimeCounting();
                 notificationSound.play();
+                chMod();
             }
             console.log(mode);
         }, 500);
 
 
         btnStart.addEventListener('click', () => {
-            chMod();
             startTime = new Date();
             let timeInterval = mode ? sessionLength : breakLength;
             endTime = +startTime + timeInterval * 60 * 1000;
@@ -126,13 +138,13 @@
         });
 
         document.querySelector('#skipBtn').addEventListener('click', ()=>{
-            if (!timeCounts) chMod();
+            chMod();
             stopTimeCounting();
         })
 
-        document.addEventListener('keydown', function (e) {
-            if (e.keyCode == 27) mainWindow.close();
-        });
+        // document.addEventListener('keydown', function (e) {
+        //     if (e.keyCode == 27) mainWindow.close();
+        // });
 
         document.querySelector('#sessionLengthField').addEventListener('input', (e) => {
             sessionLength = e.currentTarget.value;
@@ -164,7 +176,7 @@
         function chMod() {
             mode = !mode;
             document.body.style.background = mode ? clWork : clBreak;
-            btnStart.innerHTML = mode ? 'Go Chilling' : 'Work Hard!'
+            btnStart.innerHTML = mode ? 'Work Hard!' : 'Go Chilling';
         }
 
         function chTimeCounting() {
