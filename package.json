@@ -5,7 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-packager . --prune=true --overwrite=true --icon=icon.png ",
+    "pack": "electron-packager . --prune=true --overwrite=true --asar=true ",
+    "pack-mac": "electron-packager . --prune=true --overwrite=true --icon=assets/icon/tomato.icns",
+    "pack-win": "electron-packager . --prune=true --overwrite=true --asar=true --icon=assets/icon/tomato.ico",
+    "pack-lin": "electron-packager . --prune=true --overwrite=true --asar=true --icon=assets/icon/tomato.png",
     "dist": "electron-builder"
   },
   "author": "Ruslan Abkadirov",
