@@ -21,7 +21,7 @@ function createWindow () {
       textAreasAreResizable: false
     },
     frame: true,
-    icon: path.join(__dirname, 'assets\\icon\\tomato.png')
+    icon: path.join(__dirname, 'assets/icon/tomato.png')
   })
 
   // and load the index.html of the app.
