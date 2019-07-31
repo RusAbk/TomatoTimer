@@ -124,6 +124,9 @@
                 chTimeCounting();
                 notificationSound.play();
                 chMod();
+
+                let newWindowUrl = !mode ? 'work_finished.html' : 'chill_finished.html';
+                window.open(newWindowUrl, '_blank', 'width=400, height=200');
             }
             console.log(mode);
         }, 500);
