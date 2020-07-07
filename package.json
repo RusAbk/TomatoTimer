@@ -14,7 +14,7 @@
   "author": "Ruslan Abkadirov",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.8",
+    "electron": "^9.1.0",
     "electron-packager": "^14.0.2"
   }
 }
